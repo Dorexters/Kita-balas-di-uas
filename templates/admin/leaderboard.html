@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard{% endblock %}
+{% block content %}
+<h2>Leaderboard 10 Skor Tertinggi</h2>
+<table>
+    <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>Username</th>
+        <th>Skor</th>
+    </tr>
+    {% for mhs in top_mahasiswa %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ mhs.nama }}</td>
+        <td>{{ mhs.username }}</td>
+        <td>{{ mhs.skor }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

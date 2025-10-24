@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="login-box">
+    <h2>Login</h2>
+    <form method="post">
+        <label>Username</label>
+        <input type="text" name="username" required autofocus>
+        <label>Password</label>
+        <input type="password" name="password" required>
+        <button type="submit">Login</button>
+    </form>
+    <p>Belum punya akun? <a href="{{ url_for('auth.register') }}">Register</a></p>
+    <p><b>Admin login:</b> Username: <code>admin</code> | Password: <code>admin123</code></p>
+</div>
+{% endblock %}

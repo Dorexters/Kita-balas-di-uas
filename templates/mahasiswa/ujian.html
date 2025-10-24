@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Ujian Online{% endblock %}
+{% block content %}
+<h2>Soal Nomor {{ page + 1 }} dari {{ total_soal }}</h2>
+<form method="post">
+    <div class="soal">
+        <p>{{ soal.pertanyaan|safe }}</p>
+        {% if soal.tipe == 'gambar' and soal.file_path %}
+            <img src="{{ url_for('static', filename=soal.file_path.split('static/')[1]) }}" width="240" alt="Gambar Soal">
+        {% elif soal.tipe == 'video' and soal.file_path %}
+            <video width="320" controls>
+                <source src="{{ url_for('static', filename=soal.file_path.split('static/')[1]) }}">
+                Video tidak didukung
+            </video>
+        {% endif %}
+        <div class="opsi">
+            <label><input type="radio" name="jawaban" value="A" {% if jawaban_terpilih == "A" %}checked{% endif %}>A. {{ soal.opsi_a }}</label><br>
+            <label><input type="radio" name="jawaban" value="B" {% if jawaban_terpilih == "B" %}checked{% endif %}>B. {{ soal.opsi_b }}</label><br>
+            <label><input type="radio" name="jawaban" value="C" {% if jawaban_terpilih == "C" %}checked{% endif %}>C. {{ soal.opsi_c }}</label><br>
+            <label><input type="radio" name="jawaban" value="D" {% if jawaban_terpilih == "D" %}checked{% endif %}>D. {{ soal.opsi_d }}</label><br>
+        </div>
+    </div>
+    <div class="navigasi">
+        {% if page > 0 %}
+            <button type="submit" name="prev" value="prev">Sebelumnya</button>
+        {% endif %}
+        {% if page < total_soal - 1 %}
+            <button type="submit" name="next" value="next">Selanjutnya</button>
+        {% else %}
+            <button type="submit" name="submit" value="submit" onclick="return confirm('Yakin submit semua jawaban?')">Selesai & Lihat Skor</button>
+        {% endif %}
+    </div>
+</form>
+{% endblock %}

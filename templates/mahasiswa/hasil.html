@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Hasil Ujian{% endblock %}
+{% block content %}
+<h2>Hasil Ujian</h2>
+<p>Nama: <b>{{ current_user.nama }}</b> ({{ current_user.username }})</p>
+<p>Skor: <span class="skor">{{ hasil.skor }}</span> dari {{ soal_list|length }}</p>
+<table>
+    <tr>
+        <th>No</th>
+        <th>Pertanyaan</th>
+        <th>Jawaban Anda</th>
+        <th>Status</th>
+        <th>Penjelasan</th>
+    </tr>
+    {% for idx, soal in enumerate(soal_list) %}
+    <tr>
+        <td>{{ idx + 1 }}</td>
+        <td>
+            {{ soal.pertanyaan|safe }}
+            {% if soal.tipe == 'gambar' and soal.file_path %}
+                <br><img src="{{ url_for('static', filename=soal.file_path.split('static/')[1]) }}" width="120">
+            {% elif soal.tipe == 'video' and soal.file_path %}
+                <br><video width="160" controls>
+                    <source src="{{ url_for('static', filename=soal.file_path.split('static/')[1]) }}">
+                </video>
+            {% endif %}
+        </td>
+        <td>
+            {{ jawaban[soal.id|string] }}
+        </td>
+        <td>
+            {% if benar_salah[soal.id|string] %}
+                <span class="benar">Benar</span>
+            {% else %}
+                <span class="salah">Salah (Benar: {{ soal.jawaban_benar }})</span>
+            {% endif %}
+        </td>
+        <td>
+            {{ soal.penjelasan or '-' }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{{ url_for('mahasiswa.dashboard') }}">Kembali ke Dashboard</a>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Sesi Ujian{% endblock %}
+{% block content %}
+<h2>Sesi Ujian</h2>
+<form method="post">
+    <p>Status Ujian: 
+        {% if status == '1' %}
+            <span class="active">Sedang Berlangsung</span>
+        {% else %}
+            <span class="inactive">Belum Dimulai</span>
+        {% endif %}
+    </p>
+    {% if status == '0' %}
+        <button type="submit" name="mulai">Mulai Ujian</button>
+    {% else %}
+        <button type="submit" name="akhiri">Akhiri Ujian</button>
+    {% endif %}
+    <button type="submit" name="hapus" onclick="return confirm('Semua soal & hasil ujian akan dihapus. Lanjutkan?')">Hapus Semua Data Ujian</button>
+</form>
+{% endblock %}

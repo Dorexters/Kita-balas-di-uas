@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Registrasi{% endblock %}
+{% block content %}
+<div class="register-box">
+    <h2>Registrasi Mahasiswa</h2>
+    <form method="post">
+        <label>Username</label>
+        <input type="text" name="username" required>
+        <label>Nama Lengkap</label>
+        <input type="text" name="nama" required>
+        <label>Password</label>
+        <input type="password" name="password" required>
+        <label>Ulangi Password</label>
+        <input type="password" name="password2" required>
+        <button type="submit">Daftar</button>
+    </form>
+    <p>Sudah punya akun? <a href="{{ url_for('auth.login') }}">Login</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Kelola Soal{% endblock %}
+{% block content %}
+<h2>Kelola Soal</h2>
+<form method="post" enctype="multipart/form-data" class="soal-form">
+    <label>Pertanyaan</label>
+    <textarea name="pertanyaan" required></textarea>
+    <label>Tipe Soal</label>
+    <select name="tipe" required onchange="toggleFileUpload(this)">
+        <option value="teks">Teks</option>
+        <option value="gambar">Gambar</option>
+        <option value="video">Video</option>
+    </select>
+    <div id="file-upload" style="display:none">
+        <label>Upload Gambar/Video</label>
+        <input type="file" name="file">
+    </div>
+    <label>Opsi A</label>
+    <input type="text" name="opsi_a" required>
+    <label>Opsi B</label>
+    <input type="text" name="opsi_b" required>
+    <label>Opsi C</label>
+    <input type="text" name="opsi_c" required>
+    <label>Opsi D</label>
+    <input type="text" name="opsi_d" required>
+    <label>Jawaban Benar</label>
+    <select name="jawaban_benar" required>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+    </select>
+    <label>Penjelasan Jawaban</label>
+    <textarea name="penjelasan"></textarea>
+    <button type="submit">Tambah Soal</button>
+</form>
+<hr>
+<h3>Daftar Soal</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Pertanyaan</th>
+        <th>Tipe</th>
+        <th>Media</th>
+        <th>Pilihan</th>
+        <th>Jawaban</th>
+        <th>Aksi</th>
+    </tr>
+    {% for soal in daftar_soal %}
+    <tr>
+        <td>{{ soal.id }}</td>
+        <td>{{ soal.pertanyaan|truncate(40) }}</td>
+        <td>{{ soal.tipe }}</td>
+        <td>
+            {% if soal.file_path %}
+                {% if soal.tipe == 'gambar' %}
+                    <img src="{{ url_for('static', filename=soal.file_path.split('static/')[1]) }}" alt="Gambar Soal" width="60">
+                {% elif soal.tipe == 'video' %}
+                    <video width="100" controls>
+                        <source src="{{ url_for('static', filename=soal.file_path.split('static/')[1]) }}">
+                        Video tidak didukung
+                    </video>
+                {% endif %}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+        <td>
+            <b>A.</b> {{ soal.opsi_a }}<br>
+            <b>B.</b> {{ soal.opsi_b }}<br>
+            <b>C.</b> {{ soal.opsi_c }}<br>
+            <b>D.</b> {{ soal.opsi_d }}
+        </td>
+        <td>{{ soal.jawaban_benar }}</td>
+        <td>
+            <a href="{{ url_for('admin.edit_soal', soal_id=soal.id) }}">Edit</a> |
+            <form method="post" action="{{ url_for('admin.hapus_soal', soal_id=soal.id) }}" style="display:inline" onsubmit="return confirm('Hapus soal ini?')">
+                <button type="submit">Hapus</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<script>
+function toggleFileUpload(select) {
+    var fileDiv = document.getElementById('file-upload');
+    fileDiv.style.display = (select.value === "gambar" || select.value === "video") ? "block" : "none";
+}
+</script>
+{% endblock %}

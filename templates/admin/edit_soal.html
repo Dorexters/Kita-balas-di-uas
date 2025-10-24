@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Edit Soal{% endblock %}
+{% block content %}
+<h2>Edit Soal ID {{ soal.id }}</h2>
+<form method="post" enctype="multipart/form-data" class="soal-form">
+    <label>Pertanyaan</label>
+    <textarea name="pertanyaan" required>{{ soal.pertanyaan }}</textarea>
+    <label>Tipe Soal</label>
+    <select name="tipe" required onchange="toggleFileUpload(this)">
+        <option value="teks" {% if soal.tipe == 'teks' %}selected{% endif %}>Teks</option>
+        <option value="gambar" {% if soal.tipe == 'gambar' %}selected{% endif %}>Gambar</option>
+        <option value="video" {% if soal.tipe == 'video' %}selected{% endif %}>Video</option>
+    </select>
+    <div id="file-upload" style="display:none">
+        <label>Upload Gambar/Video (kosongkan jika tidak diubah)</label>
+        <input type="file" name="file">
+    </div>
+    <label>Opsi A</label>
+    <input type="text" name="opsi_a" value="{{ soal.opsi_a }}" required>
+    <label>Opsi B</label>
+    <input type="text" name="opsi_b" value="{{ soal.opsi_b }}" required>
+    <label>Opsi C</label>
+    <input type="text" name="opsi_c" value="{{ soal.opsi_c }}" required>
+    <label>Opsi D</label>
+    <input type="text" name="opsi_d" value="{{ soal.opsi_d }}" required>
+    <label>Jawaban Benar</label>
+    <select name="jawaban_benar" required>
+        <option value="A" {% if soal.jawaban_benar == 'A' %}selected{% endif %}>A</option>
+        <option value="B" {% if soal.jawaban_benar == 'B' %}selected{% endif %}>B</option>
+        <option value="C" {% if soal.jawaban_benar == 'C' %}selected{% endif %}>C</option>
+        <option value="D" {% if soal.jawaban_benar == 'D' %}selected{% endif %}>D</option>
+    </select>
+    <label>Penjelasan Jawaban</label>
+    <textarea name="penjelasan">{{ soal.penjelasan }}</textarea>
+    <button type="submit">Simpan</button>
+    <a href="{{ url_for('admin.kelola_soal') }}">Batal</a>
+</form>
+<script>
+function toggleFileUpload(select) {
+    var fileDiv = document.getElementById('file-upload');
+    fileDiv.style.display = (select.value === "gambar" || select.value === "video") ? "block" : "none";
+}
+window.onload = function() {
+    var select = document.getElementsByName('tipe')[0];
+    toggleFileUpload(select);
+};
+</script>
+{% endblock %}
